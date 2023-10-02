@@ -82,11 +82,19 @@ function updateCurrentWeatherUI(weatherData) {
 
 // Define a function to update the search history
 function updateSearchHistory(city) {
-    // You can add the searched city to the search history list
-    const searchHistoryItem = document.createElement('li');
-    searchHistoryItem.textContent = city;
-    searchHistoryList.appendChild(searchHistoryItem);
+    // Get the existing search history from local storage or initialize it as an empty array
+    let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+    // Add the searched city to the search history array
+    searchHistory.push(city);
+
+    // Store the updated search history array in local storage
+    localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+
+    // Call a function to update the search history list in the UI
+    displaySearchHistory(searchHistory);
 }
+
 
 // Define a function to display the current weather conditions
 function displayCurrentWeather(weatherData) {
@@ -202,6 +210,51 @@ function displayForecast(forecastData) {
         forecastContainer.appendChild(forecastItem);
     });
 }
+
+// Define a function to display the search history in the UI
+function displaySearchHistory(searchHistory) {
+    // Clear the search history list
+    searchHistoryList.innerHTML = '';
+
+    // Loop through the search history array and create list items for each search
+    searchHistory.forEach(city => {
+        const listItem = document.createElement('li');
+        listItem.textContent = city;
+
+        // Add an event listener to each list item to allow re-searching
+        listItem.addEventListener('click', () => {
+            // Call the fetchWeatherData function with the clicked city
+            fetchWeatherData(city);
+        });
+
+        // Append the list item to the search history list
+        searchHistoryList.appendChild(listItem);
+    });
+}
+
+// Add a click event listener to the searchHistoryContainer
+searchHistoryContainer.addEventListener('click', function (event) {
+    if (event.target.tagName === 'LI') {
+        // Check if the clicked element is an <li> (list item)
+        const selectedCity = event.target.textContent;
+
+        // Call the fetchWeatherData function with the selected city
+        fetchWeatherData(selectedCity);
+    }
+});
+
+// Function to load and display search history during initial page load
+function loadSearchHistory() {
+    const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+    
+    // Call the displaySearchHistory function to display the search history
+    displaySearchHistory(searchHistory);
+}
+
+// Call the loadSearchHistory function when the page loads
+window.addEventListener('load', loadSearchHistory);
+
+
 
 
 
