@@ -44,6 +44,9 @@ function fetchWeatherData(city) {
             console.error('Error fetching weather data:', error);
             // Handle other errors that may occur during the fetch
         });
+        // Inside the fetchWeatherData function after successfully fetching data
+        displayCurrentWeather(data);
+
 }
 
 
@@ -67,3 +70,50 @@ function updateSearchHistory(city) {
     searchHistoryItem.textContent = city;
     searchHistoryList.appendChild(searchHistoryItem);
 }
+
+// Define a function to display the current weather conditions
+function displayCurrentWeather(weatherData) {
+    // Extract relevant data from the API response
+    const cityName = weatherData.name;
+    const date = new Date(weatherData.dt * 1000); // Convert timestamp to date
+    const iconUrl = `http://openweathermap.org/img/w/${weatherData.weather[0].icon}.png`;
+    const temperature = weatherData.main.temp;
+    const humidity = weatherData.main.humidity;
+    const windSpeed = weatherData.wind.speed;
+
+    // Create HTML elements to display the data
+    const weatherInfoContainer = document.createElement('div');
+    weatherInfoContainer.classList.add('weather-info');
+
+    const cityElement = document.createElement('h2');
+    cityElement.textContent = `Current Weather in ${cityName}`;
+
+    const dateElement = document.createElement('p');
+    dateElement.textContent = `Date: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+
+    const iconElement = document.createElement('img');
+    iconElement.src = iconUrl;
+    iconElement.alt = weatherData.weather[0].description;
+
+    const temperatureElement = document.createElement('p');
+    temperatureElement.textContent = `Temperature: ${temperature}°C`;
+
+    const humidityElement = document.createElement('p');
+    humidityElement.textContent = `Humidity: ${humidity}%`;
+
+    const windSpeedElement = document.createElement('p');
+    windSpeedElement.textContent = `Wind Speed: ${windSpeed} m/s`;
+
+    // Append the created elements to the weatherInfoContainer
+    weatherInfoContainer.appendChild(cityElement);
+    weatherInfoContainer.appendChild(dateElement);
+    weatherInfoContainer.appendChild(iconElement);
+    weatherInfoContainer.appendChild(temperatureElement);
+    weatherInfoContainer.appendChild(humidityElement);
+    weatherInfoContainer.appendChild(windSpeedElement);
+
+    // Update the currentWeatherContainer with the weatherInfoContainer
+    currentWeatherContainer.innerHTML = ''; // Clear previous content
+    currentWeatherContainer.appendChild(weatherInfoContainer);
+}
+
