@@ -47,7 +47,24 @@ function fetchWeatherData(city) {
         // Inside the fetchWeatherData function after successfully fetching data
         displayCurrentWeather(data);
 
+    // Process the data and update the currentWeatherContainer
+    // with the current weather information
+    updateCurrentWeatherUI(data);
+
+    // Extract lat and lon from the current weather API response
+    const lat = data.coord.lat;
+    const lon = data.coord.lon;
+
+    // Call a function to fetch the 5-day forecast using lat and lon
+    fetchFiveDayForecast(lat, lon);
+
+    // You can also store the search history and update the searchHistoryContainer
+    // with the latest search
+    updateSearchHistory(city);
 }
+
+
+
 
 
 // Define a function to update the UI with current weather data
@@ -116,4 +133,75 @@ function displayCurrentWeather(weatherData) {
     currentWeatherContainer.innerHTML = ''; // Clear previous content
     currentWeatherContainer.appendChild(weatherInfoContainer);
 }
+
+// Define a function to fetch the 5-day forecast using lat and lon
+function fetchFiveDayForecast(lat, lon) {
+    // Construct the API URL for the 5-day forecast using lat, lon, and the API key
+    const forecastUrl = `${baseUrl}forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+
+    // Fetch data from the 5-day forecast API
+    fetch(forecastUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error fetching 5-day forecast data');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Process the 5-day forecast data and display it
+            displayForecast(data);
+        })
+        .catch(error => {
+            console.error('Error fetching 5-day forecast data:', error);
+            // Handle errors
+        });
+}
+
+// Define a function to display the 5-day forecast
+function displayForecast(forecastData) {
+    // Clear the forecastContainer
+    forecastContainer.innerHTML = '';
+
+    // Loop through the forecast data
+    forecastData.list.forEach(forecast => {
+        // Extract relevant data for each forecast
+        const date = new Date(forecast.dt * 1000);
+        const iconUrl = `http://openweathermap.org/img/w/${forecast.weather[0].icon}.png`;
+        const temperature = forecast.main.temp;
+        const humidity = forecast.main.humidity;
+        const windSpeed = forecast.wind.speed;
+
+        // Create HTML elements to display the forecast data
+        const forecastItem = document.createElement('div');
+        forecastItem.classList.add('forecast-item');
+
+        const dateElement = document.createElement('p');
+        dateElement.textContent = `Date: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+
+        const iconElement = document.createElement('img');
+        iconElement.src = iconUrl;
+        iconElement.alt = forecast.weather[0].description;
+
+        const temperatureElement = document.createElement('p');
+        temperatureElement.textContent = `Temperature: ${temperature}°C`;
+
+        const humidityElement = document.createElement('p');
+        humidityElement.textContent = `Humidity: ${humidity}%`;
+
+        const windSpeedElement = document.createElement('p');
+        windSpeedElement.textContent = `Wind Speed: ${windSpeed} m/s`;
+
+        // Append the created elements to the forecastItem
+        forecastItem.appendChild(dateElement);
+        forecastItem.appendChild(iconElement);
+        forecastItem.appendChild(temperatureElement);
+        forecastItem.appendChild(humidityElement);
+        forecastItem.appendChild(windSpeedElement);
+
+        // Append the forecastItem to the forecastContainer
+        forecastContainer.appendChild(forecastItem);
+    });
+}
+
+
 
