@@ -12,16 +12,26 @@ searchForm.addEventListener('submit', function (event) {
 
 // Define the fetchWeatherData function to fetch weather data based on the user's input
 function fetchWeatherData(city) {
-    // You can use the OpenWeather API to fetch weather data here
-    // Construct the API URL using the apiKey and city
-    const apiUrl = `${baseUrl}weather?q=${city}&appid=${'0e6c7f3a3e6cc010b40e84fa4133a8ca'}`;
+    // Construct the API URL using the user's input and API key
+    const apiUrl = `${baseUrl}weather?q=${city}&appid=${apiKey}`;
 
-    // You can use fetch or any other method to make an API request
-    // and handle the response to update the UI with weather data
-    // For example:
+    // Fetch data from the API using the constructed URL
     fetch(apiUrl)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                // Handle the case where the API request returns an error
+                throw new Error('City not found or other API error');
+            }
+            return response.json();
+        })
         .then(data => {
+            // Check if the API response contains an error message
+            if (data.cod === '404') {
+                // Handle the case where the city is not found
+                alert('City not found. Please enter a valid city name.');
+                return;
+            }
+
             // Process the data and update the currentWeatherContainer
             // with the current weather information
             updateCurrentWeatherUI(data);
@@ -32,8 +42,10 @@ function fetchWeatherData(city) {
         })
         .catch(error => {
             console.error('Error fetching weather data:', error);
+            // Handle other errors that may occur during the fetch
         });
 }
+
 
 // Define a function to update the UI with current weather data
 function updateCurrentWeatherUI(weatherData) {
