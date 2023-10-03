@@ -3,56 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Weather Dashboard</title>
-    <!-- Add CSS stylesheets or link to external stylesheets here -->
 </head>
 <body>
-    <div class="container">
-        <!-- Search Form -->
-        <div id="searchForm">
-            <input type="text" id="cityInput" placeholder="Enter a city">
-            <button id="searchButton">Search</button>
-        </div>
-
-        <!-- Current Weather Data -->
-        <div id="currentWeatherContainer">
-            <!-- Display current weather data here -->
-        </div>
-
-        <!-- Forecast Data -->
-        <div id="forecastContainer">
-            <!-- Display forecast data here -->
-        </div>
-
-        <!-- Search History List -->
-        <div id="searchHistoryContainer">
-            <h3>Search History</h3>
-            <ul id="searchHistoryList">
-                <!-- Display search history items here -->
-            </ul>
-        </div>
-    </div>
-
-    <!-- Add JavaScript script -->
+    <header>
+        <h1>Weather Dashboard</h1>
+        <form id="searchForm">
+            <input type="text" id="cityInput" placeholder="Enter city">
+            <button type="submit">Search</button>
+        </form>
+    </header>
+    <main>
+        <section id="currentWeatherContainer">
+            <!-- Current weather data will be displayed here -->
+        </section>
+        <section id="forecastContainer">
+            <!-- 5-day forecast data will be displayed here -->
+        </section>
+        <section id="searchHistoryContainer">
+            <!-- Search history will be displayed here -->
+        </section>
+    </main>
     <script src="script.js"></script>
-    <script>
-        // Define API key variable for the OpenWeather API
-        const apiKey = '0e6c7f3a3e6cc010b40e84fa4133a8ca';
-
-        // Define base URL for the OpenWeather API
-        const baseUrl = 'https://api.openweathermap.org/data/2.5/';
-
-        // Create variables to store references to HTML elements
-        const searchForm = document.getElementById('searchForm');
-        const cityInput = document.getElementById('cityInput');
-        const currentWeatherContainer = document.getElementById('currentWeatherContainer');
-        const forecastContainer = document.getElementById('forecastContainer');
-        const searchHistoryContainer = document.getElementById('searchHistoryContainer');
-        const searchHistoryList = document.getElementById('searchHistoryList');
-
-        // Add event listeners and functions for fetching weather data and updating the UI
-        // These will be implemented in subsequent steps of your project.
-
-    </script>
 </body>
 </html>
