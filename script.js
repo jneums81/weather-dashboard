@@ -1,4 +1,3 @@
-// Define your API key and base URL
 const apiKey = '0e6c7f3a3e6cc010b40e84fa4133a8ca';
 const baseUrl = 'https://api.openweathermap.org/data/2.5';
 
@@ -18,7 +17,6 @@ searchForm.addEventListener('submit', function (e) {
 
 // Fetch weather data from OpenWeather API
 function fetchWeatherData(city) {
-    // Construct the API URL
     const apiUrl = `${baseUrl}/weather?q=${city}&appid=${apiKey}`;
 
     // Fetch data from the API
